@@ -172,6 +172,6 @@ mod tests {
             SystemInfo::new(io.clone(), PathBuf::from("relative.sock")),
             Err(Error::Io(IoError::InvalidConfiguration))
         ));
-        assert!(SystemInfo::new(io, PathBuf::from("/run/user/1000/rldyour-sysinfo.sock")).is_ok());
+        assert!(SystemInfo::new(io, std::env::temp_dir().join("rldyour-sysinfo.sock")).is_ok());
     }
 }
