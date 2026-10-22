@@ -100,3 +100,78 @@ pub(crate) enum InvalidSample {
     Version,
     Metrics,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{
+        NativeIo,
+        view::{Cpu, Disk, Gpu, Memory, Network},
+    };
+
+    fn snapshot() -> SystemSnapshot {
+        SystemSnapshot {
+            v: 1,
+            cpu: Cpu {
+                usage: Some(12.5),
+                temp: Some(41.0),
+            },
+            memory: Memory {
+                used: Some(60.0),
+                swap: None,
+            },
+            gpu: Gpu {
+                usage: None,
+                memory: None,
+                temp: None,
+            },
+            disk: Disk {
+                read: None,
+                write: None,
+                temp: Some(35.0),
+            },
+            net: Network {
+                rx: Some(1024),
+                tx: None,
+            },
+        }
+    }
+
+    #[test]
+    fn valid_sample_with_missing_hardware_readings_passes() {
+        assert!(snapshot().validate().is_ok());
+    }
+
+    #[test]
+    fn unsupported_protocol_version_is_rejected() {
+        let mut sample = snapshot();
+        sample.v = 2;
+        assert!(matches!(sample.validate(), Err(InvalidSample::Version)));
+    }
+
+    #[test]
+    fn out_of_range_and_non_finite_metrics_are_rejected() {
+        for usage in [101.0, -1.0, f64::NAN, f64::INFINITY] {
+            let mut sample = snapshot();
+            sample.cpu.usage = Some(usage);
+            assert!(matches!(sample.validate(), Err(InvalidSample::Metrics)));
+        }
+    }
+
+    #[test]
+    fn non_finite_temperature_is_rejected() {
+        let mut sample = snapshot();
+        sample.disk.temp = Some(f64::NAN);
+        assert!(matches!(sample.validate(), Err(InvalidSample::Metrics)));
+    }
+
+    #[test]
+    fn constructor_requires_an_absolute_socket_path() {
+        let io = NativeIo::new(1).unwrap().local_handle();
+        assert!(matches!(
+            SystemInfo::new(io.clone(), PathBuf::from("relative.sock")),
+            Err(Error::Io(IoError::InvalidConfiguration))
+        ));
+        assert!(SystemInfo::new(io, PathBuf::from("/run/user/1000/rldyour-sysinfo.sock")).is_ok());
+    }
+}
