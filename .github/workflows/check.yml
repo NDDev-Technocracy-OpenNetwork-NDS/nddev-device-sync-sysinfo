@@ -46,3 +46,11 @@ jobs:
         env:
           STATUS: ${{ steps.native.outputs.status }}
         run: test "$STATUS" = success
+      - name: Fetch verified standalone Systeminfo
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --connect-timeout 10 --max-time 60 https://raw.githubusercontent.com/NDDev-Technocracy-OpenNetwork-NDS/nddev-device-sync-agent/4de5a6010a01b34bf3b7a1a3b82b317bbc585019/scripts/fetch-provider.py --output "$RUNNER_TEMP/fetch-provider.py"
+          python3 "$RUNNER_TEMP/fetch-provider.py" provider.lock.json "$RUNNER_TEMP/native-provider"
+      - name: Read a real released provider sample
+        run: cargo test --locked --test provider -- --ignored

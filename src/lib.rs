@@ -1,4 +1,4 @@
-//! Read-only integration with the native rldyour-sysinfo owner.
+//! Read-only integration with the independent NDDev Systeminfo owner.
 
 #[cfg(any(target_os = "linux", target_os = "macos", target_os = "windows"))]
 mod adapter;

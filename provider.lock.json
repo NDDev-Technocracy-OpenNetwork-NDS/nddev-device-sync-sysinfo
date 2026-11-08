@@ -1,10 +1,10 @@
 {
-  "repository": "NDDev-OpenNetwork/rldyour-sysinfo",
-  "release": "v0.3.1",
-  "linux_asset": "rldyour-sysinfo-0.3.1-x86_64-linux.tar.gz",
-  "sha256": "ce80fe802d5ccd64f12fe7660ef11c4bdb9a2a4df3b7d20bbda3e0450d92a5e3",
+  "repository": "NDDev-Technocracy-OpenNetwork/nddev-systeminfo",
+  "release": "v0.3.3",
+  "linux_asset": "nddev-systeminfo-0.3.3-x86_64-linux.tar.gz",
+  "sha256": "07e57cba52cc6cdc6b3f970d631472d67142397597675bfaa23e06ab77c9b92c",
   "executables": {
-    "NDS_TEST_SYSINFO_DAEMON": "rldyour-sysinfod"
+    "NDS_TEST_SYSINFO_DAEMON": "nddev-systeminfo-0.3.3-x86_64-linux/bin/nddev-systeminfod"
   },
-  "size": 260171
+  "size": 773251
 }
