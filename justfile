@@ -1,5 +1,9 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
+# List the project commands.
+default:
+    @just --list
+
 check:
     just --fmt --check
     cargo fmt --all -- --check
@@ -7,10 +11,6 @@ check:
 
 provider-check:
     cargo test --locked --test provider -- --ignored
-
-# List the project commands.
-default:
-    @just --list
 
 # Fetch locked source dependencies without compiling.
 setup:
