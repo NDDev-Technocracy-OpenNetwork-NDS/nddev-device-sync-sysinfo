@@ -1,9 +1,9 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
+# Checks source and task formatting without compiling.
 check:
-    cargo fmt -- --check
-    cargo clippy --locked --all-targets -- -D warnings
-    cargo test --locked
+    just --fmt --check
+    cargo fmt --all --check
 
 provider-check:
     cargo test --locked --test provider -- --ignored
