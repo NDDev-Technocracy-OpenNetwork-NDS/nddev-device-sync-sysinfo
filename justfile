@@ -1,5 +1,9 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
+# List the maintained source, native and provider commands.
+default:
+    @just --list
+
 # Checks source and task formatting without compiling.
 check:
     just --fmt --check
@@ -29,3 +33,7 @@ verify:
     just ci-policy
     just ci-extras
     just ci-build
+
+# Format only the maintained command interface.
+fix:
+    just --fmt
